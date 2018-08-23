@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+        .list-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .list-enter-active,
+        .list-leave-active {
+            transition: all .5s;
+
+        }
+
+        .list-enter,
+        .list-leave-to
+        /* .list-leave-active for below version 2.1.8 */
+
+            {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+
+<body>
+    <div id="app">
+
+        <input type="text" v-model.trim="city" @keyup.enter="search" placeholder="请输入你要查询的城市">
+        <!-- <ul> -->
+            <transition-group name="list" tag="ul" v-show="isShow" v-cloak>
+            
+                <li v-for="(item, index) in weatherList" :key="item.date"  :style="{transitionDelay:index*200+'ms'}">
+                    {{item}}
+                </li>
+            </transition-group>
+
+        <!-- </ul> -->
+
+    </div>
+
+</body>
+
+</html>
+
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- <script src="./03.musicPlay/js/"></script> -->
+<!-- !-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- vue的插件 基于vue才可以使用 -->
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+
+
+<script>
+    let app = new Vue({
+        el: "#app",
+        data: {
+            city: '',
+            // weatherList:[]
+            weatherList: [],
+            isShow:false
+
+        },
+        methods: {
+            search() {
+                // 删除数据
+                this.weatherList = [];
+                // 每次进来先隐藏ul标签即可
+                this.isShow = false;
+                // 使用vue-resourceajax请求
+                this.$http.get(`http://wthrcdn.etouch.cn/weather_mini?city=${this.city}`)
+                    // this.$http.get(`http://wthrcdn.etouch.cn/weather34567890_mini?city=${this.city}`)
+                    .then(response => {
+                        console.log(response);
+                        this.weatherList = response.body.data.forecast;
+                        // 数据回来之后 显示出来
+                        this.isShow = true;
+                    }, response => {
+                        // 错误回调
+                        // error callback
+                        console.log(response);
+                    });
+
+            }
+        }
+    })
+</script>

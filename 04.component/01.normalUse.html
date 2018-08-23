@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="components-demo">
+        <zhao-sky></zhao-sky>
+        <zhao-sky></zhao-sky>
+    </div>
+</body>
+
+</html>
+
+<script src="./js/vue.js"></script>
+<script>
+    // 定义一个名为 button-counter 的新组件
+    // component 组件
+    // 参数1 组件的名字 可以随机起名 有意义
+    Vue.component('zhao-sky', {
+        // 数据 必须以函数返回值的方式 返回
+        // 保证每个组件都有自己独立的数据对象 避免 指向同一个地址
+        data: function () {
+            return {
+                count: 0
+            }
+        },
+        // 模板(组件的结构) 必须有一个根节点
+        template: `
+        <div>
+            <input type="button" value="-" @click="count--">
+                <span>{{count}}</span>
+            <input type="button" value="+" @click="count++">
+        </div>
+        `
+    })
+
+    // 实例化vue对象
+    new Vue({
+        el: '#components-demo'
+    })
+</script>

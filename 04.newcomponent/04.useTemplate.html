@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <q-boy></q-boy>
+    </div>
+</body>
+
+</html>
+<script src="./js/vue.js"></script>
+<script type="text/html" id="tem">
+    <input type="button" value="toggle" @click="show!=show"> 
+    <img src="./img/214dba73afb22e2253d0f83de72b9996.gif" alt="" v-show="show">
+
+</script>
+<script>
+    //写组件
+    Vue.component('button-counter', {
+        data: function () {
+            return {
+                // count: 0
+            show :false
+            }
+        },
+        template:'#tem'
+    })
+    let app = new Vue({
+        el:'#app'
+    })
+</script>

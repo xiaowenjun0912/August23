@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <q-boy></q-boy>
+    </div>
+</body>
+
+</html>
+<!-- 导入Vue -->
+<script src="./js/vue.js"></script>
+
+<!-- 定义一个模板 用来转组件的结构 -->
+<template  id="tem2">
+    <div>
+        <input type="button" value="toggle" @click="show=!show">
+        <img v-show="show" src="./img/214dba73afb22e2253d0f83de72b9996.gif" alt="">
+    </div>
+</template>
+
+<script>
+    // 写组件
+    Vue.component('q-boy', {
+        // 数据
+        data: function () {
+            return {
+                show: false
+            }
+        },
+        // 模板 模板的id即可
+        template: '#tem2'
+        // 方法
+        // 计算属性
+        // watch
+    })
+
+    // 实例化Vue
+    let app = new Vue({
+        el: "#app"
+    })
+</script>

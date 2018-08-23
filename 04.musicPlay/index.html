@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* display: flex; */
+        }
+
+        #app {
+            height: 100%;
+            display: flex;
+        }
+
+        .left {
+            width: 500px;
+            background-color: skyblue;
+            height: 100%;
+            padding-left: 50px;
+            overflow-y: scroll;
+        }
+
+        .left ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .left ul li {
+            cursor: pointer;
+        }
+
+        .left input {
+            width: 80%;
+            margin-top: 30px;
+            height: 30px;
+            border-radius: 15px;
+            border: none;
+        }
+
+        .left ul li:hover {
+            background-color: yellowgreen;
+            color: white
+        }
+
+        .right {
+            flex: 1;
+            background-color: hotpink;
+            height: 100%;
+        }
+        .right audio{
+            display: block;
+            margin: 100px auto;
+        }
+
+        .list-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .list-enter-active,
+        .list-leave-active {
+            transition: all .5s;
+
+        }
+
+        .list-enter,
+        .list-leave-to
+        /* .list-leave-active for below version 2.1.8 */
+
+            {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+<body>
+    <div id="app" v-cloak>
+        <div class="left">
+            <input type="text" @keyup.enter="search" placeholder="请输入你要查询的歌曲" v-model="musicName">
+            <transition-group>
+            <li @dblclick="playMusic(item.id)" v-for="(item, index) in musicList" :key="item.id">
+                {{item.name}}--歌手:{{item.artists[0].name}}
+            </li>
+            </transition-group>
+        </div>
+        <div class="right">
+            <audio src="musciUrl" autoplay controls v-show="musicUrl!=''"></audio>
+        </div>
+    </div>
+    
+</body>
+</html>
+<script src="./js/vue.js"></script>
+<script src="./js/axios.js"></script> 
+
+<script>
+    let app = new Vue ({
+        el:"#app",
+        data:{
+            musicName:"", // 音乐数据
+            musicList:[], // 音乐数组
+            isShow:false,   //是否显示
+            musicUrl:""  //音乐的地址
+        },
+        methods:{
+            seacrh(){
+                //初始化数据
+                this.isShow = false;
+                 this.musicList = [];
+                  // 调用接口 查音乐 
+                axios.get(`http://192.168.38.83:3000/search?keywords=${this.musicName}`)
+                    .then(response => {
+                        console.log(response);
+                        // 赋值
+                        this.musicList = response.data.result.songs;
+                        // 显示数据
+                        this.isShow = true;
+
+                    })
+            },
+              playMusic(musicId){
+                // console.log(musicId);
+                axios.get(`http://192.168.38.83:3000/music/url?id=${musicId}`)
+                .then(response=>{
+                    // console.log(response);
+                    // 获取地址
+                    this.musicUrl = response.data.data[0].url;
+                })
+            }
+        },
+      
+    })
+
+</script>

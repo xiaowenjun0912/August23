@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+
+        <input type="text" v-model.trim="city" @keyup.enter="search" placeholder="请输入你要查询的城市">
+        <ul>
+            <li v-for="(item, index) in weatherList" >
+                {{item.date}}--{{item.high}}
+            </li>
+
+        </ul>
+
+    </div>
+
+</body>
+</html>
+<!-- <script src="./04.newcomponent/js/vue.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+    let app = new Vue({
+        el:"#app",
+        data:{
+            city:'',
+            // weatherList:[]
+            weatherList:[]
+
+        },
+        methods:{
+            search(){
+                // 原生的ajax 设置异步对象
+                //1.创建异步对象
+                let ajax = new XMLHttpRequest();
+
+                //2.设置请求行
+                ajax.open('get',`http://wthrcdn.etouch.cn/weather_mini?city=${this.city}`);
+                //3.设置请求头(get请求可以省略)
+                //4.注册状态改变事件 使用箭头函数绑定this
+                ajax.onload= ()=>{
+                    // console.log(ajax.responseText);
+                    let backData = JSON.parse(ajax.responseText);
+                    // console.log(backData);
+                    // this.weatherList = backData.data.forecast;
+                    this.weatherList = backData.data.forcast;
+
+                }
+                //4.1判断状态&请求是否成功并使用数据
+                ajax.send(null);
+                //5.发送请求
+            }
+        }
+    })
+</script>
